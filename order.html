@@ -1,0 +1,332 @@
+<html>
+<title>
+Hapi Hapi Foods
+</title>
+
+<head>
+</head>
+<style>
+body{
+ background-image: url(wings.jpg);
+}
+
+.back{
+position: relative;
+text-align: center;
+color: black;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+
+.text-blocka{
+  width: 250px;
+  height: 125px;
+  position: absolute;
+  top: 15%;
+  left: 47%;
+  margin: -50px 0 0 -50px;
+}
+
+
+.text-blockb{
+  width: 250px;
+  height: 125px;
+  position: absolute;
+  top: 25%;
+  left: 34%;
+  margin: -50px 0 0 -50px;
+}
+
+
+
+.image-blocka{
+  position: absolute;
+  top: 25%;
+  left: 61%;
+  margin: -50px 0 0 -50px;
+}
+
+.image-blockb{
+  position: absolute;
+  top: 47%;
+  left: 61%;
+  margin: -50px 0 0 -50px;
+}
+
+.image-blockc{
+  position: absolute;
+  top: 70%;
+  left: 61%;
+  margin: -50px 0 0 -50px;
+}
+
+.image-blockd{
+  position: absolute;
+  top: 93%;
+  left: 61%;
+  margin: -50px 0 0 -50px;
+}
+
+.image-blocke{
+  position: absolute;
+  top: 114%;
+  left: 61%;
+  margin: -50px 0 0 -50px;
+}
+
+
+
+
+
+
+.Choice{
+  border: none;
+  position: absolute;
+  top: 25%;
+  left: 34%;
+  margin: -50px 0 0 -50px;
+}
+
+
+.Checkout{
+  border: none;
+  position: absolute;
+  top: 90%;
+  left: 34%;
+  margin: -50px 0 0 -50px;
+}
+
+
+
+
+
+
+
+
+.link{
+  position: absolute;
+  top: 13%;
+  left: 35%;
+  margin: -50px 0 0 -50px;
+}
+
+.link2{
+  position: absolute;
+  top: 13%;
+  left: 50%;
+  margin: -50px 0 0 -50px;
+}
+
+
+.link4{
+  position: absolute;
+  top: 13%;
+  left: 65%;
+  margin: -50px 0 0 -50px;
+}
+
+
+
+
+
+
+
+</style>
+
+<body>
+<div class="back">
+<img src="back.jpg" height="200%;" width="50%;">
+</div>
+
+
+<div class="text-blocka">
+<h1>Wings of Pedro</h1>
+</div>
+
+
+<div class="text-blockb">
+<p id="out"></p>
+</div>
+
+
+<div class="image-blocka">
+<img src="pic.jpg" width="305" height="250">
+</div>
+
+<div class="image-blockb">
+<img src="pic2.jpg" width="305" height="250">
+</div>
+
+<div class="image-blockc">
+<img src="pic3.jpg" width="305" height="250">
+</div>
+
+<div class="image-blockd">
+<img src="pic4.jpg" width="305" height="250">
+</div>
+
+<div class="image-blocke">
+<img src="pic5.jpg" width="305" height="250">
+</div>
+
+
+
+<div class="Choice">
+    <h2>Menu</h2>
+    <form id="orderForm">
+        <input type="radio" name="item" value="Bufallo" data-price="100"> Bufallo (100)<br>
+        <input type="radio" name="item" value="Soy Garlic" data-price="100"> Soy Garlic (100)<br>
+		<input type="radio" name="item" value="Parmesean" data-price="100"> Parmesean (100)<br>
+        <input type="radio" name="item" value="Salted Egg" data-price="120"> Salted Egg (120)<br>
+		<input type="radio" name="item" value="Hickory" data-price="120"> Hickory (120)<br>
+        <input type="radio" name="item" value="Siracha" data-price="120"> Siracha (120)<br>
+        Count: <input type="number" id="count" min="1" value="1"><br>
+        <button type="button" onclick="addToCart()">Add to Cart</button>
+        <button type="button" id="editButton" style="display: none;" onclick="editCart()">Edit Cart</button>
+    </form>
+    <h2>Cart</h2>
+    <div id="cart"></div>
+</div>
+
+
+
+
+<div class="Checkout">
+<h2>Customer Details</h2>
+<p>Name: <input type="Text" name="name" id="nam" placeholder = "Enter your Name" required></p>
+<p>Address: <input type="Text" id="add"name="address" placeholder = "Enter your Adress" required></p>
+<button onclick="checkout()">Confirm order</button>
+</form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="link">
+<a href= "index.html">Home</a>
+</div>
+
+<div class="link2">
+<a href= "order.html">Order Here!</a>
+</div>
+<div class="link4">
+<a href= "About.html">About us</a>
+
+
+
+
+<script language="JavaScript">
+
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let editIndex = null;
+
+        function addToCart() {
+            let item = document.querySelector('input[name="item"]:checked');
+            let count = document.getElementById('count').value;
+            let price = item.dataset.price;
+            let total = count * price;
+
+            let order = {
+                item: item.value,
+                count: count,
+                price: price,
+                total: total
+            };
+
+            cart.push(order);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function displayCart() {
+            let cartDiv = document.getElementById('cart');
+            cartDiv.innerHTML = '';
+            let totalAmount = 0;
+
+            cart.forEach((order, index) => {
+                totalAmount += parseInt(order.total);
+                cartDiv.innerHTML += `${order.item} - ${order.count} - ${order.price} - ${order.total} 
+                <button onclick="removeOrder(${index})">Remove</button>
+                <button onclick="prepareEditOrder(${index})">Edit</button><br>`;
+            });
+
+            cartDiv.innerHTML += `Total Amount: ${totalAmount}`;
+			
+			
+			localStorage.setItem("item", totalAmount);
+        }
+
+        function removeOrder(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function prepareEditOrder(index) {
+            let order = cart[index];
+            let itemInputs = document.querySelectorAll('input[name="item"]');
+            for(let i = 0; i < itemInputs.length; i++) {
+                if(itemInputs[i].value === order.item) {
+                    itemInputs[i].checked = true;
+                    break;
+                }
+            }
+            document.getElementById('count').value = order.count;
+            document.getElementById('editButton').style.display = 'block';
+            editIndex = index;
+        }
+
+        function editCart() {
+            let item = document.querySelector('input[name="item"]:checked');
+            let count = document.getElementById('count').value;
+            let price = item.dataset.price;
+            let total = count * price;
+
+            let order = {
+                item: item.value,
+                count: count,
+                price: price,
+                total: total
+            };
+
+            cart[editIndex] = order;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+            document.getElementById('editButton').style.display = 'none';
+            editIndex = null;
+        }
+
+        displayCart();
+		
+		
+		
+		function checkout(){
+		var x = document.getElementById("nam").value;
+		var y = document.getElementById("add").value;
+        alert("Customer Name:  " + x + "\n" + "Adress:  " + y + "\n" + "Please prepare:  " +localStorage.getItem("item") + "php" + "\n" + "" + "\n" + "ENJOY AND THANK YOU FROM BUYING");
+		
+		
+        } 
+
+		
+		
+</script>
+
+
+
+</div>
+</body>
+</html>
